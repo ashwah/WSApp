@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "start": "node index.js",
+    "start-watch": "nodemon index.js",
+    "dev": "concurrently -–kill-others-on-fail \"npm run start-watch\" \"cd client && npm start\""
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +18,7 @@
     "uuid": "^8.0.0"
   },
   "devDependencies": {
+    "concurrently": "^5.2.0",
     "nodemon": "^2.0.4"
   }
 }
