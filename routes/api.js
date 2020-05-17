@@ -6,7 +6,6 @@ const { v4: uuidv4 } = require('uuid');
 // A pool to manage database connections.
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: true,
 });
 
 // Get UUID.
