@@ -9,6 +9,8 @@ import makeData from './makeData'
 const Styles = styled.div`
   padding: 1rem;
   table {
+    margin-left:auto;
+    margin-right:auto;
     border-spacing: 0;
     border: 1px solid black;
     tr {
