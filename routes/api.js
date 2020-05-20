@@ -25,4 +25,16 @@ router.post('/weight-data', (req, res, next) => {
   })
 });
 
+// Post weight data.
+router.get('/weight-data', (req, res, next) => {
+  const text = 'SELECT * FROM weight_data WHERE id IN (SELECT MAX(id) FROM weight_data GROUP BY pod_uuid);'
+  //const values = [req.body.pod_uuid, req.body.weight_value]
+  pool.query(text, (error, results) => {
+    if (error) {
+      throw error
+    }
+    res.status(200).json(results.rows)
+  })
+});
+
 module.exports = router;
