@@ -18,7 +18,6 @@
   },
   "scripts": {
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "start": "node index.js",
     "start-watch": "nodemon index.js",
     "dev": "concurrently -–kill-others-on-fail \"npm run start-watch\" \"cd client && npm start\"",
     "start": "react-scripts start",
