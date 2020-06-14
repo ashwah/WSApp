@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import './App.css';
 import makeData from './makeData'
 
+// This is a comment.
 const WS_URL = 'ws://weight-see.herokuapp.com:8080'
 const API_URL = 'http://weight-see.herokuapp.com/api/weight-data'
 
