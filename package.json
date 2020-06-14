@@ -20,8 +20,10 @@
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "start-watch": "nodemon index.js",
     "dev": "concurrently -–kill-others-on-fail \"npm run start-watch\" \"cd client && npm start\"",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production",
+//    "start": "react-scripts start",
+//    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
