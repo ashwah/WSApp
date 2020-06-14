@@ -1,8 +1,8 @@
 {
-<<<<<<< HEAD
   "name": "ws-client",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -17,6 +17,10 @@
     "ws": "^7.3.0"
   },
   "scripts": {
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
+    "start": "node index.js",
+    "start-watch": "nodemon index.js",
+    "dev": "concurrently -–kill-others-on-fail \"npm run start-watch\" \"cd client && npm start\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -37,20 +41,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000/"
-=======
-  "name": "weight_see",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "start": "node index.js",
-    "start-watch": "nodemon index.js",
-    "dev": "concurrently -–kill-others-on-fail \"npm run start-watch\" \"cd client && npm start\""
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -61,6 +51,6 @@
   "devDependencies": {
     "concurrently": "^5.2.0",
     "nodemon": "^2.0.4"
-  }
->>>>>>> 8ad39c7cf3463f19412f02a7284e2ff92b08f471
+  },
+  "proxy": "http://localhost:5000/"
 }
