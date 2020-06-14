@@ -62,7 +62,7 @@ class App extends Component {
         Header: 'Info',
         columns: [
           {
-            Header: 'Age',
+            Header: 'UUID',
             accessor: 'pod_uuid',
           },
           {
