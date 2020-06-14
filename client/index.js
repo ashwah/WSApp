@@ -1,6 +1,6 @@
 require('dotenv').config();
-
 const PORT = process.env.PORT || 5000;
+
 const express = require('express')
 const app = express()
 const routes = require('./routes/api')
@@ -16,6 +16,7 @@ app.use((req, res, next) => {
 // Use Bodyparser middleware.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));

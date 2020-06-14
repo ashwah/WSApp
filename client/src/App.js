@@ -1,10 +1,13 @@
-import React, { useMemo, useState, useEffect } from "react";
-
+import React, { Component, useMemo, useState, useEffect } from "react";
+import update from 'react-addons-update';
 import Table from "./Table";
 import logo from './logo.svg';
 import styled from 'styled-components'
 import './App.css';
 import makeData from './makeData'
+
+const WS_URL = 'ws://localhost:8080'
+const API_URL = 'http://localhost:3000/api/weight-data'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -33,9 +36,15 @@ const Styles = styled.div`
   }
 `
 
-function App() {
-  const columns = React.useMemo(
-    () => [
+class App extends Component {
+
+
+
+  constructor(){
+
+    super()
+    this.ws = new WebSocket(WS_URL)
+    this.columns = [
       {
         Header: 'Name',
         columns: [
@@ -54,11 +63,11 @@ function App() {
         columns: [
           {
             Header: 'Age',
-            accessor: 'age',
+            accessor: 'pod_uuid',
           },
           {
             Header: 'Visits',
-            accessor: 'visits',
+            accessor: 'weight_value',
           },
           {
             Header: 'Status',
@@ -70,34 +79,79 @@ function App() {
           },
         ],
       },
-    ],
-    []
-  )
+    ]
+    this.state = {
+      data: []
+    }
+  }
 
-  const data = React.useMemo(() => makeData(20), [])
+  updateWeightByIndex(index, weight_value) {
+    console.log(index)
+    let data = [...this.state.data]
+    let item = {...data[index]}
+    item.weight_value = weight_value
+    data[index] = item
+    this.setState({data})
+  }
 
+  componentDidMount() {
+    console.log('componentdidmount')
+    fetch(API_URL)
+      .then(response => response.json())
+      .then((data) => {
+        console.log('fetch')
+        return this.setState({data})
+      })
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn Reacter
-        </a>
-      </header>
-      <Styles>
-        <Table columns={columns} data={data} />
-      </Styles>
-    </div>
-  );
+    // console.log('did mount')
+    // this.ws.onopen = () => {
+    //   // on connecting, do nothing but log it to the console
+    //   console.log('connected')
+    //   this.ws.send('xxxx')
+    // }
+
+    this.ws.onmessage = evt => {
+      let newData = JSON.parse(evt.data)
+      for (let i = 0; i < this.state.data.length; i++) {
+        if (this.state.data[i].pod_uuid == newData.pod_uuid) {
+          this.updateWeightByIndex(i, newData.weight_value)
+        }
+      }
+    }
+
+    this.ws.onclose = () => {
+      console.log('disconnected')
+      // // automatically try to reconnect on connection loss
+      // this.setState({
+      //   ws: new WebSocket(URL),
+      // })
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          {/*<p>*/}
+          {/*  Edit <code>src/App.js</code> and save to reload.*/}
+          {/*</p>*/}
+          {/*<a*/}
+          {/*  className="App-link"*/}
+          {/*  href="https://reactjs.org"*/}
+          {/*  target="_blank"*/}
+          {/*  rel="noopener noreferrer"*/}
+          {/*>*/}
+          {/*  Learn ReactFaceArse*/}
+          {/*</a>*/}
+        </header>
+        <Styles>
+          <Table columns={this.columns} data={this.state.data} />
+        </Styles>
+      </div>
+    );
+  }
+
 }
 
 export default App;
