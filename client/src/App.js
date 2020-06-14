@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import './App.css';
 import makeData from './makeData'
 
-const WS_URL = 'ws://weight-see.herokuapp.com:8080'
-const API_URL = 'https://weight-see.herokuapp.com/api/weight-data'
+const WS_URL = 'ws://localhost:8080'
+const API_URL = 'http://localhost:3000/api/weight-data'
 
 const Styles = styled.div`
   padding: 1rem;
@@ -62,7 +62,7 @@ class App extends Component {
         Header: 'Info',
         columns: [
           {
-            Header: 'UUID',
+            Header: 'Age',
             accessor: 'pod_uuid',
           },
           {
