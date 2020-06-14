@@ -7,7 +7,7 @@ import './App.css';
 import makeData from './makeData'
 
 const WS_URL = 'ws://localhost:8080'
-const API_URL = 'http://localhost:3000/api/weight-data'
+const API_URL = 'http://weight-see.herokuapp.com/api/weight-data'
 
 const Styles = styled.div`
   padding: 1rem;
