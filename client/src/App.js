@@ -7,7 +7,7 @@ import './App.css';
 import makeData from './makeData'
 
 
-const WS_URL = 'ws://localhost:3000/ws'
+const WS_URL = 'ws://weight-see.herokuapp.com/ws'
 const API_URL = '/api/weight-data'
 
 const Styles = styled.div`
