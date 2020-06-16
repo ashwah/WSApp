@@ -68,7 +68,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 //app.use('/ws', createProxyMiddleware({ target: 'localhost:8080', ws: true }));
 
-const wsProxy = createProxyMiddleware('/ws', {target:'ws://localhost:8080', ws:true});
+const wsProxy = createProxyMiddleware('/ws', {target:'wss://localhost:8080', ws:true});
 app.use(wsProxy);
 
 // Start the app.

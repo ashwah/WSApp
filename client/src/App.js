@@ -7,7 +7,7 @@ import './App.css';
 import makeData from './makeData'
 
 
-const WS_URL = 'ws://' + document.location.host + '/ws';
+const WS_URL = 'wss://' + document.location.host + '/ws';
 const API_URL = '/api/weight-data';
 
 const Styles = styled.div`
