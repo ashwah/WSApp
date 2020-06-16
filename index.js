@@ -19,8 +19,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, 'client/build')));
-//
+app.use(express.static(path.join(__dirname, 'client/public')));
+
 
 
 // Serve the API routes.
@@ -30,9 +30,9 @@ app.use('/api', routes);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname+'/client/public/index.html'));
-// });
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/public/index.html'));
+});
 
 
 
