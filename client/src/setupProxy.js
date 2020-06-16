@@ -4,7 +4,7 @@ const wsProxy = createProxyMiddleware('/ws', {
   target:'http://localhost:8080',
   logLevel: 'debug',
   secure: true,
-  changeOrigin: true,
+  //changeOrigin: true,
   ws: true});
 const apiProxy = createProxyMiddleware('/test', {target:'http://localhost:5000'});
 
