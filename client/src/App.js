@@ -6,7 +6,8 @@ import styled from 'styled-components'
 import './App.css';
 import makeData from './makeData'
 
-const WS_URL = 'ws://localhost:8080'
+
+const WS_URL = 'ws://localhost:3000/ws'
 const API_URL = '/api/weight-data'
 
 const Styles = styled.div`
@@ -95,20 +96,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('componentdidmount')
     fetch(API_URL)
       .then(response => response.json())
       .then((data) => {
         console.log('fetch')
         return this.setState({data})
       })
-
-    // console.log('did mount')
-    // this.ws.onopen = () => {
-    //   // on connecting, do nothing but log it to the console
-    //   console.log('connected')
-    //   this.ws.send('xxxx')
-    // }
 
     this.ws.onmessage = evt => {
       let newData = JSON.parse(evt.data)
@@ -121,10 +114,6 @@ class App extends Component {
 
     this.ws.onclose = () => {
       console.log('disconnected')
-      // // automatically try to reconnect on connection loss
-      // this.setState({
-      //   ws: new WebSocket(URL),
-      // })
     }
   }
 
@@ -133,17 +122,6 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          {/*<p>*/}
-          {/*  Edit <code>src/App.js</code> and save to reload.*/}
-          {/*</p>*/}
-          {/*<a*/}
-          {/*  className="App-link"*/}
-          {/*  href="https://reactjs.org"*/}
-          {/*  target="_blank"*/}
-          {/*  rel="noopener noreferrer"*/}
-          {/*>*/}
-          {/*  Learn ReactFaceArse*/}
-          {/*</a>*/}
         </header>
         <Styles>
           <Table columns={this.columns} data={this.state.data} />
