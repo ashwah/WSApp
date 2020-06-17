@@ -7,8 +7,8 @@ import './App.css';
 import makeData from './makeData'
 
 
-const WS_URL = 'ws://localhost:8080/ws'
-const API_URL = 'http://localhost:5000/api/weight-data'
+const WS_URL = process.env.REACT_APP_WS_URL
+const API_URL = process.env.REACT_APP_API_URL
 
 const Styles = styled.div`
   padding: 1rem;

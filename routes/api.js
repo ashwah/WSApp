@@ -2,7 +2,6 @@ const express = require ('express');
 const router = express.Router();
 const { Pool } = require('pg');
 const { v4: uuidv4 } = require('uuid');
-//const wss = require('../websockets');
 
 // A pool to manage database connections.
 const pool = new Pool({
@@ -23,17 +22,7 @@ router.post('/weight-data', (req, res, next) => {
     if (error) {
       throw error
     }
-    // wss.clients.forEach((ws) => {
-    //   console.log('sending?')
-    //   var data = {
-    //     pod_uuid: req.body.pod_uuid,
-    //     weight_value: req.body.weight_value,
-    //   }
-    //   ws.send(JSON.stringify(data))
-    // })
-
   })
-  //res.send('Weight data inserted')
   next();
 });
 
@@ -48,7 +37,6 @@ router.get('/weight-data', (req, res, next) => {
       throw error
     }
     res.status(200).json(results.rows)
-
   })
 });
 
