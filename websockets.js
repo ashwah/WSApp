@@ -1,10 +1,6 @@
 // const WebSocket = require('ws');
-// const express = require('express')
-// const app = express();
 //
-//
-// console.log(app);
-// const wss = new WebSocket.Server({server: app});
+// const wss = new WebSocket.Server({port: 8080});
 //
 // wss.on('connection', function connection(ws) {
 //   console.log('connection')
