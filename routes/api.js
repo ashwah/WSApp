@@ -16,8 +16,10 @@ router.get('/uuid', (req, res, next) => {
 // Post weight data.
 router.post('/weight-data', (req, res, next) => {
   console.log(req.body);
-  const text = 'INSERT INTO weight_data (pod_uuid, timestamp, weight_value) VALUES ($1, NOW(), $2)'
-  const values = [req.body.pod_uuid, req.body.weight_value]
+  var date = new Date();
+  req.body.timestamp = date.toISOString();
+  const text = 'INSERT INTO weight_data (pod_uuid, timestamp, weight_value) VALUES ($1, $2, $3)'
+  const values = [req.body.pod_uuid, req.body.timestamp, req.body.weight_value]
   pool.query(text, values, (error, results) => {
     if (error) {
       throw error
@@ -28,7 +30,6 @@ router.post('/weight-data', (req, res, next) => {
 
 // Get weight data.
 router.get('/weight-data', (req, res, next) => {
-  console.log('help')
   const text = 'SELECT * FROM weight_data WHERE id IN (SELECT MAX(id) FROM weight_data GROUP BY pod_uuid);'
   const values = [req.body.pod_uuid, req.body.weight_value]
   pool.query(text, (error, results) => {

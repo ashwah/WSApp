@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import './App.css';
 import makeData from './makeData'
 
-
 const WS_URL = process.env.REACT_APP_WS_URL
 const API_URL = process.env.REACT_APP_API_URL
 
@@ -41,42 +40,24 @@ class App extends Component {
 
 
 
-  constructor(){
-
+  constructor() {
     super()
     this.ws = new WebSocket(WS_URL)
     this.columns = [
       {
-        Header: 'Name',
+        Header: 'Weight Data',
         columns: [
           {
-            Header: 'First Name',
-            accessor: 'firstName',
-          },
-          {
-            Header: 'Last Name',
-            accessor: 'lastName',
-          },
-        ],
-      },
-      {
-        Header: 'Info',
-        columns: [
-          {
-            Header: 'Age',
+            Header: 'UUID',
             accessor: 'pod_uuid',
           },
           {
-            Header: 'Visits',
+            Header: 'Weight',
             accessor: 'weight_value',
           },
           {
-            Header: 'Status',
-            accessor: 'status',
-          },
-          {
-            Header: 'Profile Progress',
-            accessor: 'progress',
+            Header: 'Last Updated',
+            accessor: 'timestamp',
           },
         ],
       },
@@ -86,11 +67,12 @@ class App extends Component {
     }
   }
 
-  updateWeightByIndex(index, weight_value) {
+  updateWeightByIndex(index, weight_value, timestamp) {
     console.log(index)
     let data = [...this.state.data]
     let item = {...data[index]}
     item.weight_value = weight_value
+    item.timestamp = timestamp
     data[index] = item
     this.setState({data})
   }
@@ -107,7 +89,7 @@ class App extends Component {
       let newData = JSON.parse(evt.data)
       for (let i = 0; i < this.state.data.length; i++) {
         if (this.state.data[i].pod_uuid == newData.pod_uuid) {
-          this.updateWeightByIndex(i, newData.weight_value)
+          this.updateWeightByIndex(i, newData.weight_value, newData.timestamp)
         }
       }
     }

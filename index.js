@@ -39,6 +39,7 @@ app.post('/api/weight-data', function (req, res, next) {
     var data = {
       pod_uuid: req.body.pod_uuid,
       weight_value: req.body.weight_value,
+      timestamp: req.body.timestamp,
     }
     ws.send(JSON.stringify(data))
   })
