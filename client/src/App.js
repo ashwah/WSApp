@@ -77,6 +77,16 @@ class App extends Component {
     this.setState({data})
   }
 
+  addNewDataItem(newData) {
+    let data = [...this.state.data]
+    let item = {}
+    item.pod_uuid = newData.pod_uuid
+    item.weight_value = newData.weight_value
+    item.timestamp = newData.timestamp
+    data.push(item)
+    this.setState({data})
+  }
+
   componentDidMount() {
     fetch(API_URL)
       .then(response => response.json())
@@ -87,10 +97,15 @@ class App extends Component {
 
     this.ws.onmessage = evt => {
       let newData = JSON.parse(evt.data)
+      let isNew = true
       for (let i = 0; i < this.state.data.length; i++) {
         if (this.state.data[i].pod_uuid == newData.pod_uuid) {
           this.updateWeightByIndex(i, newData.weight_value, newData.timestamp)
+          isNew = false
         }
+      }
+      if (isNew) {
+        this.addNewDataItem(newData);
       }
     }
 
