@@ -38,8 +38,6 @@ const Styles = styled.div`
 
 class App extends Component {
 
-
-
   constructor() {
     super()
     this.ws = new WebSocket(WS_URL)
@@ -62,22 +60,20 @@ class App extends Component {
         ],
       },
     ]
-    this.state = {
-      data: []
-    }
+    this.state = {}
   }
 
   updateWeightByIndex(index, weight_value, timestamp) {
-    console.log(index)
     let data = [...this.state.data]
     let item = {...data[index]}
     item.weight_value = weight_value
     item.timestamp = timestamp
     data[index] = item
     this.setState({data})
+    this.setState({newId: index})
   }
 
-  addNewDataItem(newData) {
+  addNewDataItem(newData, index) {
     let data = [...this.state.data]
     let item = {}
     item.pod_uuid = newData.pod_uuid
@@ -85,28 +81,30 @@ class App extends Component {
     item.timestamp = newData.timestamp
     data.push(item)
     this.setState({data})
+    this.setState({newId: index})
   }
 
   componentDidMount() {
     fetch(API_URL)
       .then(response => response.json())
       .then((data) => {
-        console.log('fetch')
         return this.setState({data})
       })
 
     this.ws.onmessage = evt => {
       let newData = JSON.parse(evt.data)
       let isNew = true
-      for (let i = 0; i < this.state.data.length; i++) {
+      let i
+      for (i = 0; i < this.state.data.length; i++) {
         if (this.state.data[i].pod_uuid == newData.pod_uuid) {
           this.updateWeightByIndex(i, newData.weight_value, newData.timestamp)
           isNew = false
         }
       }
       if (isNew) {
-        this.addNewDataItem(newData);
+        this.addNewDataItem(newData, i + 1);
       }
+
     }
 
     this.ws.onclose = () => {
@@ -121,7 +119,9 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
         </header>
         <Styles>
-          <Table columns={this.columns} data={this.state.data} />
+          {this.state.data &&
+            <Table columns={this.columns} data={this.state.data} newId={this.state.newId}/>
+          }
         </Styles>
       </div>
     );

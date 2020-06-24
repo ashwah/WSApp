@@ -28,7 +28,7 @@ wss.on('connection', function connection(ws) {
     console.log('received: %s', message);
     ws.send('youre a ' + message);
   });
-  ws.send('something');
+  //ws.send('something');
 });
 
 // Add an additional callback on posts to the weight data endpoint.
