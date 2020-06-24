@@ -1,0 +1,9 @@
+
+.fade-appear {
+    background-color: purple;
+}
+
+.fade-appear-active {
+    background-color: white;
+    transition: background-color 3000ms ease-in-out;
+}
