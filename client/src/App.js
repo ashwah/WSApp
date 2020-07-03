@@ -1,10 +1,11 @@
-import React, { Component, useMemo, useState, useEffect } from "react";
-import update from 'react-addons-update';
-import Table from "./Table";
-import logo from './logo.svg';
+import React, { Component } from "react"
+//import update from 'react-addons-update';
+import Table from "./Table"
+import logo from './logo.svg'
 import styled from 'styled-components'
-import './App.css';
-import makeData from './makeData'
+import './App.css'
+import './Modal.css'
+import PodConfigForm from './PodConfigForm'
 
 const WS_URL = process.env.REACT_APP_WS_URL
 const API_URL = process.env.REACT_APP_API_URL
@@ -46,7 +47,7 @@ class App extends Component {
         Header: 'Weight Data',
         columns: [
           {
-            Header: 'UUID',
+            Header: 'Pod ID',
             accessor: 'pod_uuid',
           },
           {
@@ -56,12 +57,47 @@ class App extends Component {
           {
             Header: 'Last Updated',
             accessor: 'timestamp',
-          },
-        ],
+          }
+        ]
       },
+      {
+        Header: 'Product Data',
+        columns: [
+          {
+            Header: 'SKU',
+            accessor: '',
+          },
+          {
+            Header: 'Title',
+            accessor: '',
+          },
+          {
+            Header: 'Unit Weight',
+            accessor: '',
+          }
+        ]
+      },
+      {
+        Header: 'Actions',
+        Cell: ({ cell }) => (
+          <button value={cell.row.values.name} onClick={(e) => this.showModal(e, cell)}>...</button>
+        )
+      }
     ]
-    this.state = {}
+    this.state = { show: false }
   }
+
+  showModal = (e, cell) => {
+    console.log(cell)
+    this.setState({
+      show: true,
+      modalPodUuid: cell.row.values.pod_uuid,
+    });
+  };
+
+  hideModal = () => {
+    this.setState({ show: false });
+  };
 
   updateWeightByIndex(index, weight_value, timestamp) {
     let data = [...this.state.data]
@@ -96,7 +132,7 @@ class App extends Component {
       let isNew = true
       let i
       for (i = 0; i < this.state.data.length; i++) {
-        if (this.state.data[i].pod_uuid == newData.pod_uuid) {
+        if (this.state.data[i].pod_uuid === newData.pod_uuid) {
           this.updateWeightByIndex(i, newData.weight_value, newData.timestamp)
           isNew = false
         }
@@ -104,7 +140,6 @@ class App extends Component {
       if (isNew) {
         this.addNewDataItem(newData, i + 1);
       }
-
     }
 
     this.ws.onclose = () => {
@@ -123,10 +158,23 @@ class App extends Component {
             <Table columns={this.columns} data={this.state.data} newId={this.state.newId}/>
           }
         </Styles>
+        <Modal show={this.state.show} handleClose={this.hideModal} uuid={this.state.modalPodUuid}></Modal>
       </div>
     );
   }
 
 }
+
+const Modal = ({ handleClose, show, uuid }) => {
+  const showHideClassName = show ? "modal display-block" : "modal display-none";
+
+  return (
+    <div className={showHideClassName}>
+      <section className="modal-main">
+        <PodConfigForm uuid={uuid} handleClose={handleClose}></PodConfigForm>
+      </section>
+    </div>
+  );
+};
 
 export default App;

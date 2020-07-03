@@ -3,7 +3,7 @@ import { useTable } from "react-table";
 import { CSSTransition } from "react-transition-group";
 import './Table.css'
 
-export default function Table({ columns, data, newId }) {
+export default function Table({ columns, data, newId, showModalHandler }) {
 
   // Use the state and functions returned from useTable to build your UI
   const {
@@ -17,7 +17,6 @@ export default function Table({ columns, data, newId }) {
     data,
   })
 
-  console.log(data)
   // Render the UI for your table
   return (
 
@@ -39,7 +38,7 @@ export default function Table({ columns, data, newId }) {
             {row.cells.map((cell, j)  => {
               return (
                 <CSSTransition
-                  in={cell.row.id == newId}
+                  in={cell.row.id === newId}
                   appear={true}
                   timeout={3000}
                   classNames="fade"
