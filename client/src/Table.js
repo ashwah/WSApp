@@ -36,15 +36,16 @@ export default function Table({ columns, data, newId, showModalHandler }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map((cell, j)  => {
+              console.log(cell)
               return (
                 <CSSTransition
-                  in={cell.row.id === newId}
+                  in={cell.row.id == newId}
                   appear={true}
                   timeout={3000}
                   classNames="fade"
                   key={Date.now() + cell.column.id}
                 >
-                  <td  {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  <td  {...cell.getCellProps() }>{cell.render('Cell')}</td>
                 </CSSTransition>
               )
             })}

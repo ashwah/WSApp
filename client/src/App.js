@@ -8,7 +8,8 @@ import './Modal.css'
 import PodConfigForm from './PodConfigForm'
 
 const WS_URL = process.env.REACT_APP_WS_URL
-const API_URL = process.env.REACT_APP_API_URL
+const API_URL_WEIGHT = process.env.REACT_APP_API_URL + "/api/weight-data"
+const API_URL_PRODUCT = process.env.REACT_APP_API_URL + "/api/product-data"
 
 const Styles = styled.div`
   padding: 1rem;
@@ -65,15 +66,15 @@ class App extends Component {
         columns: [
           {
             Header: 'SKU',
-            accessor: '',
+            accessor: 'sku',
           },
           {
             Header: 'Title',
-            accessor: '',
+            accessor: 'title',
           },
           {
             Header: 'Unit Weight',
-            accessor: '',
+            accessor: 'unit_weight_string',
           }
         ]
       },
@@ -100,12 +101,14 @@ class App extends Component {
   };
 
   updateWeightByIndex(index, weight_value, timestamp) {
-    let data = [...this.state.data]
-    let item = {...data[index]}
+    console.log('?')
+    let weight_data = [...this.state.weight_data]
+    let item = {...weight_data[index]}
     item.weight_value = weight_value
     item.timestamp = timestamp
-    data[index] = item
-    this.setState({data})
+    weight_data[index] = item
+    console.log(weight_data)
+    this.setState({weight_data})
     this.setState({newId: index})
   }
 
@@ -121,18 +124,37 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch(API_URL)
+    fetch(API_URL_WEIGHT)
       .then(response => response.json())
-      .then((data) => {
-        return this.setState({data})
+      .then((weight_data) => {
+        fetch(API_URL_PRODUCT)
+          .then(response => response.json())
+          .then((product_data) => {
+            let i
+            for (i = 0; i < weight_data.length; i++) {
+              let j
+              for (j = 0; j < product_data.length; j++) {
+                if (weight_data[i].pod_uuid === product_data[j].pod_uuid) {
+                  weight_data[i].sku  = product_data[j].sku
+                  weight_data[i].title  = product_data[j].title
+                  weight_data[i].zero  = product_data[j].zero
+                  weight_data[i].multiplier  = product_data[j].multiplier
+                  weight_data[i].unit_weight  = product_data[j].unit_weight
+                  weight_data[i].unit_weight_string  = product_data[j].unit_weight + ' ' + product_data[j].unit
+                  weight_data[i].unit = product_data[j].unit
+                }
+              }
+            }
+            this.setState({weight_data})
+          })
       })
 
     this.ws.onmessage = evt => {
       let newData = JSON.parse(evt.data)
       let isNew = true
       let i
-      for (i = 0; i < this.state.data.length; i++) {
-        if (this.state.data[i].pod_uuid === newData.pod_uuid) {
+      for (i = 0; i < this.state.weight_data.length; i++) {
+        if (this.state.weight_data[i].pod_uuid == newData.pod_uuid) {
           this.updateWeightByIndex(i, newData.weight_value, newData.timestamp)
           isNew = false
         }
@@ -154,8 +176,8 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
         </header>
         <Styles>
-          {this.state.data &&
-            <Table columns={this.columns} data={this.state.data} newId={this.state.newId}/>
+          {this.state.weight_data &&
+            <Table columns={this.columns} data={this.state.weight_data} newId={this.state.newId}/>
           }
         </Styles>
         <Modal show={this.state.show} handleClose={this.hideModal} uuid={this.state.modalPodUuid}></Modal>
