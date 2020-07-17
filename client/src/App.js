@@ -113,7 +113,7 @@ class App extends Component {
   }
 
   addNewDataItem(newData, index) {
-    let data = [...this.state.data]
+    let data = [...this.state.weight_data]
     let item = {}
     item.pod_uuid = newData.pod_uuid
     item.weight_value = newData.weight_value

@@ -89,3 +89,23 @@ Postgres import can only be done via a database url. One can be temporarily made
 Then you can import like:
 
 `heroku pg:backups:restore http://bd65fc8b.ngrok.io/hotw.dump`
+
+
+## Making the product data table:
+CREATE TABLE product_data (
+  ID SERIAL PRIMARY KEY,
+  pod_uuid UUID,
+  timestamp TIMESTAMP,
+  sku VARCHAR(256),
+  title VARCHAR(256),
+  zero NUMERIC(8, 2),
+  multiplier NUMERIC(8, 2)
+);
+
+ALTER TABLE product_data
+ADD COLUMN unit_weight NUMERIC(4, 2);
+
+ALTER TABLE product_data
+ADD COLUMN unit VARCHAR(8);
+
+ALTER TABLE weight_data ALTER COLUMN weight_value NUMERIC(10, 2);
