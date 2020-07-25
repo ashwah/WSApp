@@ -31,7 +31,7 @@ router.post('/weight-data', (req, res, next) => {
 // Get weight data.
 router.get('/weight-data', (req, res, next) => {
   const text = 'SELECT * FROM weight_data WHERE id IN (SELECT MAX(id) FROM weight_data GROUP BY pod_uuid);'
-  const values = [req.body.pod_uuid, req.body.weight_value]
+  //const values = [req.body.pod_uuid, req.body.weight_value]
   pool.query(text, (error, results) => {
     console.log('help')
     if (error) {
@@ -43,30 +43,23 @@ router.get('/weight-data', (req, res, next) => {
 
 // Post product data.
 router.post('/product-data', (req, res, next) => {
+  var date = new Date();
+  req.body.timestamp = date.toISOString();
+  const text = 'INSERT INTO product_data (pod_uuid, timestamp, sku, title, unit_weight, unit, c0, c1, c0_n, c1_n) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)'
+  const values = [req.body.pod_uuid, req.body.timestamp, req.body.sku, req.body.title, req.body.unit_weight, req.body.unit, req.body.c0, req.body.c1, req.body.c0_n, req.body.c1_n]
   console.log(req.body);
-  var date = new Date();
-  req.body.timestamp = date.toISOString();
-  var date = new Date();
-  req.body.timestamp = date.toISOString();
-  const text = 'INSERT INTO product_data (pod_uuid, timestamp, sku, title, zero, multiplier, unit_weight, unit) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)'
-  const values = [req.body.pod_uuid, req.body.timestamp, req.body.sku, req.body.title, req.body.zero, req.body.multiplier, req.body.unit_weight, req.body.unit]
   pool.query(text, values, (error, results) => {
     if (error) {
       throw error
     }
     res.status(200).send('Product data inserted')
   })
-
-  // Trigger a WebSocket?
-  //next();
 });
 
 // Get product data.
 router.get('/product-data', (req, res, next) => {
   const text = 'SELECT * FROM product_data WHERE id IN (SELECT MAX(id) FROM product_data GROUP BY pod_uuid);'
-  const values = [req.body.pod_uuid, req.body.weight_value]
   pool.query(text, (error, results) => {
-
     if (error) {
       throw error
     }

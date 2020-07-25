@@ -71,7 +71,7 @@ psql hotwdb
 \conninfo 	Connection info
 \q 		Exit
 \du		List users
-
+\d+ [table] describe
 
 ## Export DB:
 
@@ -109,3 +109,16 @@ ALTER TABLE product_data
 ADD COLUMN unit VARCHAR(8);
 
 ALTER TABLE weight_data ALTER COLUMN weight_value NUMERIC(10, 2);
+
+## Tweaking the product table
+ALTER TABLE product_data ADD COLUMN c_0 NUMERIC(10, 2);
+ALTER TABLE product_data ADD COLUMN c_1 NUMERIC(10, 2);
+
+ALTER TABLE product_data RENAME COLUMN c_0 TO s0;
+ALTER TABLE product_data RENAME COLUMN c_1 TO s1;
+
+ALTER TABLE product_data ADD COLUMN c0_n INTEGER;
+ALTER TABLE product_data ADD COLUMN c1_n INTEGER;
+
+ALTER TABLE product_data DROP COLUMN zero;
+ALTER TABLE product_data DROP COLUMN multiplier;
