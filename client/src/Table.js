@@ -36,7 +36,6 @@ export default function Table({ columns, data, newId, showModalHandler }) {
         return (
           <tr {...row.getRowProps()}>
             {row.cells.map((cell, j)  => {
-              console.log(cell)
               return (
                 <CSSTransition
                   in={cell.row.id == newId}

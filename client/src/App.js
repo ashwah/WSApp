@@ -89,10 +89,9 @@ class App extends Component {
   }
 
   showModal = (e, cell) => {
-    console.log(cell)
     this.setState({
       show: true,
-      modalPodUuid: cell.row.values.pod_uuid,
+      modal_data: cell.row.values,
     });
   };
 
@@ -101,13 +100,11 @@ class App extends Component {
   };
 
   updateWeightByIndex(index, weight_value, timestamp) {
-    console.log('?')
     let weight_data = [...this.state.weight_data]
     let item = {...weight_data[index]}
     item.weight_value = weight_value
     item.timestamp = timestamp
     weight_data[index] = item
-    console.log(weight_data)
     this.setState({weight_data})
     this.setState({newId: index})
   }
@@ -180,20 +177,22 @@ class App extends Component {
             <Table columns={this.columns} data={this.state.weight_data} newId={this.state.newId}/>
           }
         </Styles>
-        <Modal show={this.state.show} handleClose={this.hideModal} uuid={this.state.modalPodUuid}></Modal>
+        {this.state.show &&
+          <Modal show={this.state.show} handleClose={this.hideModal} modalData={this.state.modal_data}></Modal>
+        }
       </div>
     );
   }
 
 }
 
-const Modal = ({ handleClose, show, uuid }) => {
+const Modal = ({ handleClose, show, modalData }) => {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
 
   return (
     <div className={showHideClassName}>
       <section className="modal-main">
-        <PodConfigForm uuid={uuid} handleClose={handleClose}></PodConfigForm>
+        <PodConfigForm modalData={modalData} handleClose={handleClose}></PodConfigForm>
       </section>
     </div>
   );
